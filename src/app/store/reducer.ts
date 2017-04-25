@@ -21,6 +21,6 @@ const initialState: IAppState = {
     ]
 };
 
-export function reducer(state: initialState, action) {
+export function reducer(state = initialState, action) {
     return state;
 }
