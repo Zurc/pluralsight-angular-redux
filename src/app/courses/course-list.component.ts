@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from './course.service';
 import { Course } from './course';
 import { FilterTextComponent } from '../blocks/filter-text';
-import { store, filterCourses, IAppState } from "../store";
+import { IAppState } from "../store";
 import { NgRedux, select } from "ng2-redux";
 import { Observable } from "rxjs/Observable";
+import { CourseActions } from "./course.actions";
 
 @Component({
   selector: 'app-course-list',
@@ -15,16 +16,18 @@ import { Observable } from "rxjs/Observable";
 export class CourseListComponent implements OnInit {
   @select('filteredCourses') filteredCourses$: Observable<Course>;
 
-  constructor(private ngRedux: NgRedux<IAppState>) {
-  }
+  constructor(
+    private ngRedux: NgRedux<IAppState>,
+    private courseActions: CourseActions
+  ) {}
 
   filterChanged(searchText: string) {
     console.log('user searched: ', searchText);
-    // call dispatch on the store and pass the results of calling the filterCourse action creator
-    store.dispatch(filterCourses(searchText));
+    this.courseActions.filterCourses(searchText);
   }
 
   ngOnInit() {
+    this.courseActions.getCourses();
     componentHandler.upgradeDom();
   }
 }
