@@ -1,5 +1,7 @@
+import { filterCourses } from './actions';
 import { Course } from ".././courses/course";    // import interface
 
 export interface IAppState {
-    courses: Course[]
+    courses: Course[],
+    filteredCourses: Course[]
 }

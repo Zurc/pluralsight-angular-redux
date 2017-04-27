@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from './course.service';
 import { Course } from './course';
-import { FilterTextComponent, FilterService } from '../blocks/filter-text';
-import { store } from "../store/store";
+import { FilterTextComponent } from '../blocks/filter-text';
+import { store, filterCourses } from "../store";
 
 @Component({
   selector: 'app-course-list',
@@ -10,28 +10,21 @@ import { store } from "../store/store";
   styleUrls: ['./course-list.component.css']
 })
 export class CourseListComponent implements OnInit {
-  courses: Course[];
-  filteredCourses = this.courses;
+  filteredCourses = [];
 
-  constructor(private _courseService: CourseService, private _filterService: FilterService) {
+  constructor(private _courseService: CourseService) {
   }
 
   filterChanged(searchText: string) {
     console.log('user searched: ', searchText);
-    this.filteredCourses = this._filterService.filter(searchText, ['id', 'name', 'topic'], this.courses);
+    // call dispatch on the store and pass the results of calling the filterCourse action creator
+    store.dispatch(filterCourses(searchText));
   }
-
-  // getCourses() {
-  //   this._courseService.getCourses()
-  //     .subscribe(courses => {
-  //       this.courses = this.filteredCourses = courses;
-  //     });
-  // }
 
   updateFromState() {
     const allState = store.getState();  // get state from store
-    this.courses = allState.courses;  // assign (bind) state courses to courses variable
-    this.filteredCourses = allState.courses;  //  bind state filtered courses from state
+    // this.courses = allState.courses;  // assign (bind) state courses to courses variable
+    this.filteredCourses = allState.filteredCourses;  //  bind state filtered courses from state
   }
 
   ngOnInit() {
